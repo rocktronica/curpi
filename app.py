@@ -8,7 +8,7 @@ app = flask.Flask(__name__, template_folder='')
 @app.route('/action/<script>')
 def action(script):
     os.system('sh action/' + script + '.sh')
-    return
+    return 'ok'
 
 @app.route('/')
 def index():
