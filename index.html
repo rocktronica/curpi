@@ -1,0 +1,48 @@
+<!doctype html>
+<title>curpi</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<title>curpi</title>
+
+<body class="container">
+    <div class="header clearfix">
+        <h1 class="text-muted">curpi</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <p>
+                <button class="btn btn-default btn-lg btn-block"
+                        data-action="play">
+                    <span class="glyphicon glyphicon-align-left glyphicon-play"
+                        aria-hidden="true"></span>
+                    Play
+                </button>
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <p>
+                <button class="btn btn-default btn-lg btn-block"
+                        data-action="stop">
+                    <span class="glyphicon glyphicon-align-left glyphicon-stop"
+                        aria-hidden="true"></span>
+                    Stop
+                </button>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script>
+        $("[data-action]").on("click", function() {
+            var $button = $(this),
+                action = $button.data("action");
+
+            $.get("/action/" + action, function(resp){
+                $("[data-action]").removeClass("active");
+                $button.addClass("active")
+            });
+        });
+    </script>
+</body>
