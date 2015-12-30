@@ -1,7 +1,10 @@
 #!/bin/bash
+{
+
+dir=$(dirname $0)
 
 # Kill any preexisting players or related processes
-sh stop.sh
+sh $dir/stop.sh
 
 # Create a named pipe to hold stream
 mkfifo /tmp/stream
@@ -11,3 +14,5 @@ screen -dm bash -c 'rtmpdump -r "rtmp://wowza.stream.publicradio.org/current-ihe
 
 # Again in a screen, play the piped stream
 screen -dm bash -c 'omxplayer /tmp/stream'
+
+}
