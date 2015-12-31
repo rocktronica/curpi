@@ -3,8 +3,10 @@
 
 dir=$(dirname $0)
 
-# Kill all pipes, streams, screens, and dumps. This is likely not ideal.
-kill -9 $(ps aux | grep '[/]tmp/stream' | awk '{print $2}') > /dev/null
+pids=$(ps aux | grep -v 'SCREEN' | grep '[/]tmp/stream' | awk '{print $2}')
+for pid in $pids; do
+    kill -9 $pid
+done
 
 # Remove old named pipe
 rm -f /tmp/stream
