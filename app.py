@@ -1,3 +1,4 @@
+import argparse
 import flask
 import glob
 import json
@@ -36,5 +37,11 @@ def index():
     )
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run(host='0.0.0.0', port=80)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default='0.0.0.0')
+    parser.add_argument("--port", type=int, default=80)
+    parser.add_argument("--debug", type=bool, default=True)
+    arguments = parser.parse_args()
+
+    app.debug = arguments.debug
+    app.run(host=arguments.host, port=arguments.port)
