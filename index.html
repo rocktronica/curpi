@@ -9,9 +9,26 @@
 <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
+<style>
+.currently-playing { margin-top: 30px; margin-bottom: 30px; }
+.currently-playing .cover-album { float: left; margin-right: 20px; }
+.currently-playing .text { overflow: hidden; }
+.currently-playing .text > *:first-child { margin-top: 0; }
+.currently-playing .text > *:last-child { margin-bottom: 0; }
+</style>
+
 <body class="container">
     <div class="header clearfix">
         <h1 class="text-muted">curpi</h1>
+    </div>
+
+    <div class="jumbotron currently-playing clearfix" data-metadata>
+        <img class="cover-album" data-metadata="art" data-metadata-fill="src" />
+        <div class="text">
+            <h2 data-metadata="artist" data-metadata-fill="text"></h2>
+            <h3 data-metadata="title" data-metadata-fill="text"></h3>
+            <p><em class="text-muted" data-metadata="album" data-metadata-fill="text"></em></p>
+        </div>
     </div>
 
     <div class="row">
@@ -48,5 +65,35 @@
                 $button.addClass("active")
             });
         });
+
+        var updateMetadata = function(data) {
+            if (!data) {
+                $.getJSON("/metadata", updateMetadata);
+                return;
+            }
+
+            $("[data-metadata]").each(function() {
+                var $element = $(this).show(),
+                    key = $element.data("metadata"),
+                    fill = $element.data("metadataFill"),
+                    value = data[key];
+
+                switch (fill) {
+                    case("text"):
+                        $element.text(value);
+                        break;
+                    case("src"):
+                        $element
+                            .attr("src", value || "")
+                            .toggle(!!value);
+                        break;
+                }
+            });
+        };
+
+        $("[data-metadata]").hide();
+        updateMetadata({{ metadata|tojson }});
+
+        setInterval(updateMetadata, 30 * 1000);
     </script>
 </body>
