@@ -10,10 +10,14 @@ app = flask.Flask(__name__, template_folder='')
 
 @app.route('/action/<script>')
 def get_action_script_result(script):
-    return subprocess.check_output(
-        'sh action/' + script + '.sh',
-        stderr=subprocess.STDOUT,
-        shell=True)
+    try:
+        return subprocess.check_output(
+            'sh action/' + script + '.sh',
+            stderr=subprocess.STDOUT,
+            shell=True
+        )
+    except subprocess.CalledProcessError, e:
+         return e.output
 
 def get_metadata():
     url = 'http://www.thecurrent.org/playlist/metadata/current'
