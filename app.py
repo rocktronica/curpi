@@ -15,25 +15,27 @@ def get_action_script_result(script):
         stderr=subprocess.STDOUT,
         shell=True)
 
-@app.route('/metadata')
-def get_metadata(jsonify=True):
+def get_metadata():
     url = 'http://www.thecurrent.org/playlist/metadata/current'
-    response = json.load(urllib2.urlopen(url))
-
-    return flask.jsonify(response) if jsonify else response
+    return json.load(urllib2.urlopen(url))
 
 @app.route('/status')
 def get_status(jsonify=True):
+    active = bool(get_action_script_result('status'))
+
     response = dict(
-        active = bool(get_action_script_result('status'))
+        active = active
     )
+
+    if active:
+        response['metadata'] = get_metadata()
 
     return flask.jsonify(response) if jsonify else response
 
 @app.route('/')
 def index():
     return flask.render_template('index.html',
-        metadata = get_metadata(False)
+        status = get_status(False),
     )
 
 if __name__ == '__main__':

@@ -61,22 +61,30 @@
                 action = $button.data("action");
 
             $.get("/action/" + action, function(resp){
-                $("[data-action]").removeClass("active");
-                $button.addClass("active")
+                update();
             });
         });
 
-        var updateMetadata = function(data) {
-            if (!data) {
-                $.getJSON("/metadata", updateMetadata);
+        var update = function(statusData) {
+            if (!statusData) {
+                $.getJSON("/status", update);
                 return;
             }
 
+            $("[data-metadata]").toggle(statusData.active);
+
+            $("[data-action]").removeClass("active");
+            $("[data-action='" + (statusData.active ? "play" : "stop") + "']")
+                .addClass("active")
+
+            var metadata = statusData.metadata;
+            if (!metadata) { return; }
+
             $("[data-metadata]").each(function() {
-                var $element = $(this).show(),
+                var $element = $(this),
                     key = $element.data("metadata"),
                     fill = $element.data("metadataFill"),
-                    value = data[key];
+                    value = metadata[key];
 
                 switch (fill) {
                     case("text"):
@@ -91,9 +99,7 @@
             });
         };
 
-        $("[data-metadata]").hide();
-        updateMetadata({{ metadata|tojson }});
-
-        setInterval(updateMetadata, 30 * 1000);
+        update({{ status|tojson }});
+        setInterval(update, 30 * 1000);
     </script>
 </body>
