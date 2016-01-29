@@ -13,6 +13,6 @@ mkfifo /tmp/stream
 screen -S curpi_play_1 -dm bash -c 'rtmpdump -r "rtmp://wowza.stream.publicradio.org/current-iheart/current-iheart.stream" --live -o /tmp/stream'
 
 # Again in a screen, play the piped stream
-screen -S curpi_play_2 -dm bash -c 'omxplayer /tmp/stream'
+screen -S curpi_play_2 -dm bash -c 'mplayer /tmp/stream'
 
 }

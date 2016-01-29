@@ -87,6 +87,8 @@ if __name__ == '__main__':
 
     def fetch_active_status():
         global active
+
+        # Need to prevent fetching if any actions haven't finished
         active = get_active_status(arguments)
 
         if arguments.debug:
