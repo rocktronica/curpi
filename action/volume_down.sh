@@ -1,6 +1,6 @@
 #!/bin/bash
 {
 
-amixer set 'Speaker' 10%-
+amixer set 'Digital' 10%-
 
 }
