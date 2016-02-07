@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="/static/style.css">
-<body class="container">
+<body class="container" data-body>
     <div class="header clearfix">
         <h1 class="text-muted">curpi</h1>
     </div>
@@ -46,9 +46,7 @@
         </div>
     </div>
 
-    <br />
-
-    <div class="row">
+    <div class="row volume-row">
         <div class="col-xs-6">
             <p>
                 <button class="btn btn-default btn-lg btn-block"
@@ -72,7 +70,10 @@
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="/static/script.js"></script>
     <script>
-        update({{ status|tojson }});
-        setInterval(update, 30 * 1000);
+        var indexView = new IndexView($("[data-body]"));
+
+        indexView
+            .update({{ status|tojson }})
+            .autoUpdate(30);
     </script>
 </body>

@@ -1,5 +1,8 @@
+h1 {
+    margin-bottom: 30px;
+}
+
 .currently-playing {
-    margin-top: 30px;
     margin-bottom: 30px;
 }
 .currently-playing .cover-album {
@@ -14,4 +17,8 @@
 }
 .currently-playing .text > *:last-child {
     margin-bottom: 0;
+}
+
+.volume-row {
+    margin-top: 25px;
 }
