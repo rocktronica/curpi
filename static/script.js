@@ -22,10 +22,15 @@ exports.IndexView = function($el) {
             return view;
         }
 
-        $el.find("[data-metadata]").toggle(statusData.active);
+        var active = statusData.active;
+
+        $el.find("[data-action='play']").toggle(!active);
+        $el.find("[data-action='stop']").toggle(active);
+
+        $el.find("[data-metadata]").toggle(active);
 
         var currentActionElement =
-            "[data-action='" + (statusData.active ? "play" : "stop") + "']";
+            "[data-action='" + (active ? "play" : "stop") + "']";
         $el.find("[data-action]")
             .removeClass("active")
             .filter(currentActionElement)

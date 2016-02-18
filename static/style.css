@@ -22,3 +22,7 @@ h1 {
 .volume-row {
     margin-top: 25px;
 }
+
+[cloak] {
+    display: none;
+}
