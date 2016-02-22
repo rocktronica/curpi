@@ -1,40 +1,28 @@
 import argparse
 import flask
-import glob
 import json
-import os
-import subprocess
-import urllib2
+import Player
 
 app = flask.Flask(__name__, template_folder='')
+player = Player.Player()
 
-@app.route('/action/<script>')
-def get_action_script_result(script):
-    try:
-        return subprocess.check_output(
-            'sh action/' + script + '.sh',
-            stderr=subprocess.STDOUT,
-            shell=True
-        )
-    except subprocess.CalledProcessError, e:
-         return e.output
-
-def get_metadata():
-    url = 'http://www.thecurrent.org/playlist/metadata/current'
-    return json.load(urllib2.urlopen(url))
+@app.route('/action/<method>')
+def run_player_method(method):
+    if method == 'play':
+        return player.play()
+    elif method == 'stop':
+        return player.stop()
+    elif method == 'volume_up':
+        return player.volume_up()
+    elif method == 'volume_down':
+        return player.volume_down()
+    elif method == 'status':
+        return player.status()
 
 @app.route('/status')
 def get_status(jsonify=True):
-    active = bool(get_action_script_result('status'))
-
-    response = dict(
-        active = active
-    )
-
-    if active:
-        response['metadata'] = get_metadata()
-
-    return flask.jsonify(response) if jsonify else response
+    status = player.get_status()
+    return flask.jsonify(status) if jsonify else status
 
 @app.route('/')
 def index():

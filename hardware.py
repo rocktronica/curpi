@@ -1,11 +1,10 @@
 import argparse
-import json
 import RPi.GPIO as GPIO
-import subprocess
 import time
-import urllib2
-import sys
 import threading
+import Player
+
+player = Player.Player()
 
 def set_interval(func, sec):
     def func_wrapper():
@@ -14,31 +13,6 @@ def set_interval(func, sec):
     timer = threading.Timer(sec, func_wrapper)
     timer.start()
     return timer
-
-def hit_action_endpoint(action, arguments):
-    host = arguments.host
-    port = arguments.port
-
-    url = 'http://' + host + ':' + str(port) + '/action/' + action
-
-    try:
-        if arguments.debug: print url
-        output = subprocess.check_output('curl ' + url,
-            stderr=subprocess.STDOUT,
-            shell=True)
-        if arguments.debug: print output
-        return output
-    except subprocess.CalledProcessError, e:
-        if arguments.debug: print e.output
-
-def get_active_status(arguments):
-    host = arguments.host
-    port = arguments.port
-
-    url = 'http://' + host + ':' + str(port) + '/status'
-    result = json.load(urllib2.urlopen(url))
-
-    return result['active']
 
 def light_toggle(on):
     GPIO.setmode(GPIO.BOARD)
@@ -58,12 +32,10 @@ def get_pressed():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--host", type=str, default='0.0.0.0')
-    parser.add_argument("--port", type=int, default=80)
     parser.add_argument("--debug", action="store_true")
     arguments = parser.parse_args()
 
-    active = get_active_status(arguments)
+    active = player.get_active()
     pressed = get_pressed()
 
     def main():
@@ -76,7 +48,14 @@ if __name__ == '__main__':
 
         if pressed and not previously_pressed:
             active = not active
-            hit_action_endpoint('play' if active else 'stop', arguments)
+
+            if active:
+                player_ouput = player.play()
+            else:
+                player_ouput = player.stop()
+
+            if arguments.debug:
+                print player_ouput
 
         if arguments.debug:
             print "main \t" + \
@@ -89,11 +68,12 @@ if __name__ == '__main__':
         global active
 
         # Need to prevent fetching if any actions haven't finished
-        active = get_active_status(arguments)
+        active = player.get_active()
 
         if arguments.debug:
-            print "fetch_active_status \t" + \
-                ('active' if active else 'off')
+            value = ('active' if active else 'off')
+            print "fetch_active_status \t" + value
+
 
     set_interval(fetch_active_status, 5)
 
