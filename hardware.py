@@ -37,44 +37,51 @@ if __name__ == '__main__':
 
     active = player.get_active()
     pressed = get_pressed()
+    line = ''
 
     def main():
-        global active, pressed
+        global active, pressed, line
 
         previously_pressed = pressed
         pressed = get_pressed()
 
         light_toggle(active)
 
+        # TODO: because there's a GUI affecting status, still need to fetch it
+        # here, at least occasionally
+        # active = player.get_active()
+
+        # OR let Flask app and hardware share same instance of player.....
+
+        updated = False
         if pressed and not previously_pressed:
-            active = not active
+            updated = True
 
             if active:
-                player_ouput = player.play()
-            else:
                 player_ouput = player.stop()
+            else:
+                player_ouput = player.play()
+
+            # Sure hope this'll immediately be accurate!
+            active = player.get_active()
 
             if arguments.debug:
                 print player_ouput
 
+        previous_line = line
         if arguments.debug:
-            print "main \t" + \
-                ('pressed' if GPIO.input(7) else 'unpressed') + "\t" + \
-                ('active' if active else 'off')
+            line = "\t".join([
+                'pressed: ' + ('Y' if pressed else 'N'),
+                'previously_pressed: ' + ('Y' if previously_pressed else 'N'),
+                'updated: ' + ('Y' if updated else 'N'),
+                'active: ' + ('Y' if active else 'N'),
+            ])
 
-    set_interval(main, 0.05)
+            if not previous_line == line:
+                print line
 
-    def fetch_active_status():
-        global active
-
-        # Need to prevent fetching if any actions haven't finished
-        active = player.get_active()
-
-        if arguments.debug:
-            value = ('active' if active else 'off')
-            print "fetch_active_status \t" + value
-
-
-    set_interval(fetch_active_status, 5)
+    while True:
+        main()
+        time.sleep(0.05)
 
     GPIO.cleanup()
