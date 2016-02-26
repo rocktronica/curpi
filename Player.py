@@ -36,17 +36,18 @@ class Player():
     def volume_down(self):
         return get_action_script_result('volume_down')
 
-    def get_status(self):
+    def get_status(self, fetch_metadata=True):
+        # Ahem...
         active = bool(get_action_script_result('status'))
 
         response = dict(
             active = active
         )
 
-        if active:
+        if active and fetch_metadata:
             response['metadata'] = get_metadata()
 
         return response
 
     def get_active(self):
-        return self.get_status()['active']
+        return self.get_status(fetch_metadata=False)['active']
