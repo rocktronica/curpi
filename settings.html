@@ -1,0 +1,39 @@
+<div class="modal fade" id="settings" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title">Settings</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Publicly exposed endpoints</h4>
+                <p>For use with IFTTT Maker Channel.</p>
+
+                {% if not exposed_endpoints %}
+                    <div class="alert alert-info" role="alert">
+                        <strong>Hmph.</strong>
+                        Looks like this isn't set up. That's okay.
+                    </div>
+                {% else %}
+                    <table class="table table-condensed">
+                        {% for endpoint in exposed_endpoints %}
+                            <tr>
+                                <th>{{ endpoint.key }}</th>
+                                <td>
+                                    <input type="text" readonly
+                                        class="form-control"
+                                        value="{{ endpoint.url }}" />
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <p>(Don't share these links publicly or expect to work on
+                        local network!)</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

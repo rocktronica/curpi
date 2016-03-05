@@ -1,6 +1,8 @@
 .container {
     max-width: 650px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
@@ -30,4 +32,18 @@ h1 {
 
 [cloak] {
     display: none;
+}
+
+html, body {
+    min-height: 100vh;
+}
+
+.footer {
+    /* Let footer fill all remaining space but its content stays at bottom */
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+
+    padding: 25px 0 30px;
 }
