@@ -22,6 +22,15 @@ def get_metadata():
     return json.load(urllib2.urlopen(url))
 
 class Player():
+    # TODO: make this less magic...
+    HARDWARE_MAX_VOLUME_PERCENT = 85 # effectively full loudness w/o distortion
+
+    VOLUME_STEPS = 12
+    DEFAULT_VOLUME_PERCENT = 90
+
+    def __init__(self):
+        self.set_volume(self.DEFAULT_VOLUME_PERCENT)
+
     def play(self):
         if self.get_active(): return
         return get_action_script_result('play')
@@ -30,11 +39,25 @@ class Player():
         if not self.get_active(): return
         return get_action_script_result('stop')
 
+    def _update_volume_step(self, step):
+        self._volume_step = step
+
+        volume_percent = ((float(self._volume_step) / float(self.VOLUME_STEPS))
+            * self.HARDWARE_MAX_VOLUME_PERCENT)
+
+        return get_action_script_result('volume_set', str(volume_percent) + '%')
+
+    def set_volume(self, volume_percent):
+        step = int((float(volume_percent) / 100) * self.VOLUME_STEPS)
+        return self._update_volume_step(step)
+
     def volume_up(self):
-        return get_action_script_result('volume_up')
+        step = min(self._volume_step + 1, self.VOLUME_STEPS)
+        return self._update_volume_step(step)
 
     def volume_down(self):
-        return get_action_script_result('volume_down')
+        step = max(0, self._volume_step - 1)
+        return self._update_volume_step(step)
 
     def get_status(self, fetch_metadata=True):
         # Ahem...
