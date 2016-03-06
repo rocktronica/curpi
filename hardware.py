@@ -6,6 +6,11 @@ import Player
 
 player = Player.Player()
 
+PINS = dict(
+    ON_OFF_BUTTON = 7,
+    ON_OFF_LIGHT = 11,
+)
+
 def set_interval(func, sec):
     def func_wrapper():
         set_interval(func, sec)
@@ -16,19 +21,13 @@ def set_interval(func, sec):
 
 def light_toggle(on):
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(11, GPIO.OUT)
-    GPIO.output(11, GPIO.HIGH if on else GPIO.LOW)
+    GPIO.setup(PINS['ON_OFF_LIGHT'], GPIO.OUT)
+    GPIO.output(PINS['ON_OFF_LIGHT'], GPIO.HIGH if on else GPIO.LOW)
 
-def light_on():
-    light_toggle(True)
-
-def light_off():
-    light_toggle(False)
-
-def get_pressed():
+def get_pressed(pin):
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(7, GPIO.IN)
-    return GPIO.input(7)
+    GPIO.setup(pin, GPIO.IN)
+    return GPIO.input(pin)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -36,19 +35,25 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
 
     active = player.get_active()
-    pressed = get_pressed()
+
+    pressed = dict(
+        on_off = get_pressed(PINS['ON_OFF_BUTTON']),
+    )
+
+    previously_pressed = dict()
+
     line = ''
 
     def main():
         global active, pressed, line
 
-        previously_pressed = pressed
-        pressed = get_pressed()
+        previously_pressed['on_off'] = pressed['on_off']
+        pressed['on_off'] = get_pressed(PINS['ON_OFF_BUTTON'])
 
         light_toggle(active)
 
         updated = False
-        if pressed and not previously_pressed:
+        if pressed['on_off'] and not previously_pressed['on_off']:
             updated = True
 
             if active:
@@ -65,8 +70,9 @@ if __name__ == '__main__':
         previous_line = line
         if arguments.debug:
             line = "\t".join([
-                'pressed: ' + ('Y' if pressed else 'N'),
-                'previously_pressed: ' + ('Y' if previously_pressed else 'N'),
+                'pressed[\'on_off\']: ' + ('Y' if pressed['on_off'] else 'N'),
+                'previously_pressed[\'on_off\']: ' +
+                    ('Y' if previously_pressed['on_off'] else 'N'),
                 'updated: ' + ('Y' if updated else 'N'),
                 'active: ' + ('Y' if active else 'N'),
             ])
