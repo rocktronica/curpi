@@ -47,3 +47,8 @@ html, body {
 
     padding: 25px 0 30px;
 }
+
+/* Breathing room for sections, IDK how to do this in canon bootstrap */
+#settings h4 ~ h4 {
+    margin-top: 2em;
+}

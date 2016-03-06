@@ -33,6 +33,27 @@
                     <p>(Don't share these links publicly or expect to work on
                         local network!)</p>
                 {% endif %}
+
+                <h4>Machine</h4>
+                <div class="alert alert-info" role="alert">
+                    <strong>Eeek!</strong>
+                    This part isn't fully baked yet...
+                </div>
+                <p>Things supposedly break if the machine is unplugged before
+                being told to shut down.</p>
+                <p>
+                    <a class="btn btn-default btn-sm btn-block"
+                            href="/action/restart"
+                            onclick="return confirm('Sure to restart?!')">
+                        Restart
+                    </a>
+                    <a class="btn btn-default btn-sm btn-block"
+                            href="/action/shut_down"
+                            onclick="return confirm('Sure to shut down?!')">
+                        Shut down
+                    </a>
+                </p>
+
             </div>
         </div>
     </div>

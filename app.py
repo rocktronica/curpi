@@ -1,6 +1,7 @@
 import argparse
 import flask
 import json
+import os
 import Player
 
 app = flask.Flask(__name__, template_folder='')
@@ -26,6 +27,11 @@ def run_player_method(method):
         return player.volume_down()
     elif method == 'status':
         return player.status()
+
+    elif method == 'restart':
+        os.system('sudo reboot')
+    elif method == 'shut_down':
+        os.system('sudo halt')
 
 @app.route('/status')
 def get_status(jsonify=True):
