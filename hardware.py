@@ -71,6 +71,10 @@ if __name__ == '__main__':
                     player_ouput = player.play()
 
                 active = player.get_active()
+            elif pressed == PINS['VOLUME_UP_BUTTON']:
+                player.volume_up()
+            elif pressed == PINS['VOLUME_DOWN_BUTTON']:
+                player.volume_down()
 
             if arguments.debug:
                 print "\t".join([
