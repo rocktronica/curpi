@@ -9,7 +9,21 @@ player = Player.Player()
 PINS = dict(
     ON_OFF_BUTTON = 7,
     ON_OFF_LIGHT = 11,
+    VOLUME_UP_BUTTON = 13,
+    VOLUME_DOWN_BUTTON = 15,
 )
+
+IO_PINS = [
+    PINS['ON_OFF_BUTTON'],
+    PINS['VOLUME_UP_BUTTON'],
+    PINS['VOLUME_DOWN_BUTTON'],
+]
+
+def first_pressed():
+    for pin in IO_PINS:
+        if get_pressed(pin):
+            return pin
+    return None
 
 def set_interval(func, sec):
     def func_wrapper():
@@ -36,49 +50,33 @@ if __name__ == '__main__':
 
     active = player.get_active()
 
-    pressed = dict(
-        on_off = get_pressed(PINS['ON_OFF_BUTTON']),
-    )
-
-    previously_pressed = dict()
-
-    line = ''
+    pressed = first_pressed()
+    clean = not pressed
 
     def main():
-        global active, pressed, line
-
-        previously_pressed['on_off'] = pressed['on_off']
-        pressed['on_off'] = get_pressed(PINS['ON_OFF_BUTTON'])
+        global active, clean, pressed
 
         light_toggle(active)
 
-        updated = False
-        if pressed['on_off'] and not previously_pressed['on_off']:
-            updated = True
+        previously_clean = clean
+        clean = not first_pressed()
+        updated = not previously_clean == clean
 
-            if active:
-                player_ouput = player.stop()
-            else:
-                player_ouput = player.play()
+        pressed = first_pressed()
+        if updated and pressed:
+            if pressed == PINS['ON_OFF_BUTTON']:
+                if active:
+                    player_ouput = player.stop()
+                else:
+                    player_ouput = player.play()
 
-            # Sure hope this'll immediately be accurate!
-            active = player.get_active()
+                active = player.get_active()
 
             if arguments.debug:
-                print player_ouput
-
-        previous_line = line
-        if arguments.debug:
-            line = "\t".join([
-                'pressed[\'on_off\']: ' + ('Y' if pressed['on_off'] else 'N'),
-                'previously_pressed[\'on_off\']: ' +
-                    ('Y' if previously_pressed['on_off'] else 'N'),
-                'updated: ' + ('Y' if updated else 'N'),
-                'active: ' + ('Y' if active else 'N'),
-            ])
-
-            if not previous_line == line:
-                print line
+                print "\t".join([
+                    'pressed: ' + str(pressed),
+                    'active:  ' + ('Y' if active else 'N'),
+                ])
 
     # TODO: let Flask app and hardware share same instance of player.....
     def fetch_active_status():
