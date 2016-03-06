@@ -47,12 +47,6 @@ if __name__ == '__main__':
 
         light_toggle(active)
 
-        # TODO: because there's a GUI affecting status, still need to fetch it
-        # here, at least occasionally
-        # active = player.get_active()
-
-        # OR let Flask app and hardware share same instance of player.....
-
         updated = False
         if pressed and not previously_pressed:
             updated = True
@@ -79,6 +73,13 @@ if __name__ == '__main__':
 
             if not previous_line == line:
                 print line
+
+    # TODO: let Flask app and hardware share same instance of player.....
+    def fetch_active_status():
+        global active
+        active = player.get_active()
+
+    set_interval(fetch_active_status, 2)
 
     while True:
         main()
