@@ -1,16 +1,29 @@
 #!/bin/bash
 
+# TODO: run on boot via /etc/rc.local, fix user mismatch errors (?), and
+# pass extra arguments
+# sudo -H -u tommy bash -c 'sh /home/tommy/curpi/run.sh &'
+
+{
+
+dir=$(dirname $0)
+
 if [ "`hostname`" != 'curpi' ]; then
     echo "Run this on curpi machine, not locally"
     exit 1
 fi
 
-screen -S curpi_app -dm bash -c 'while true; do
-    sudo python app.py
-    sleep 5
-done'
+screen -S app -X quit
+screen -S hardware -X quit
 
-screen -S curpi_hardware -dm bash -c 'while true; do
-    sudo python hardware.py
+screen -S app -dm bash -c "while true; do
+    sudo python $dir/app.py
     sleep 5
-done'
+done"
+
+screen -S hardware -dm bash -c "while true; do
+    sudo python $dir/hardware.py
+    sleep 5
+done"
+
+}
