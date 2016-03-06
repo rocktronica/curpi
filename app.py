@@ -21,10 +21,14 @@ def run_player_method(method):
         return player.play()
     elif method == 'stop':
         return player.stop()
+    elif method == 'toggle':
+        return player.toggle()
+
     elif method == 'volume_up':
         return player.volume_up()
     elif method == 'volume_down':
         return player.volume_down()
+
     elif method == 'status':
         return player.status()
 
@@ -41,7 +45,7 @@ def get_status(jsonify=True):
 def get_exposed_endpoints(public_host=None):
     if not public_host: return []
 
-    actions = ['play', 'stop', 'volume_up', 'volume_down'];
+    actions = ['toggle', 'play', 'stop', 'volume_up', 'volume_down'];
     def to_set(action):
         return dict(
             key = action,

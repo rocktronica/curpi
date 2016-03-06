@@ -39,6 +39,12 @@ class Player():
         if not self.get_active(): return
         return get_action_script_result('stop')
 
+    def toggle(self):
+        if self.get_active():
+            return self.stop()
+        else:
+            return self.play()
+
     def _update_volume_step(self, step):
         self._volume_step = step
 
