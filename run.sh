@@ -7,6 +7,7 @@
 {
 
 dir=$(dirname $0)
+arguments="$*"
 
 if [ "`hostname`" != 'curpi' ]; then
     echo "Run this on curpi machine, not locally"
@@ -17,12 +18,12 @@ screen -S app -X quit
 screen -S hardware -X quit
 
 screen -S app -dm bash -c "while true; do
-    sudo python $dir/app.py
+    sudo python $dir/app.py $arguments
     sleep 5
 done"
 
 screen -S hardware -dm bash -c "while true; do
-    sudo python $dir/hardware.py
+    sudo python $dir/hardware.py --debug
     sleep 5
 done"
 
