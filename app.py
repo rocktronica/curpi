@@ -10,7 +10,7 @@ player = Player.Player()
 parser = argparse.ArgumentParser()
 parser.add_argument("--host", type=str, default='0.0.0.0')
 parser.add_argument("--port", type=int, default=80)
-parser.add_argument("--debug", type=bool, default=True)
+parser.add_argument("--debug", type=bool, default=False)
 
 parser.add_argument("--public-host", type=str)
 arguments = parser.parse_args()
