@@ -19,7 +19,12 @@ def get_action_script_result(script, argument_string=None):
 
 def get_metadata():
     url = 'http://www.thecurrent.org/playlist/metadata/current'
-    return json.load(urllib2.urlopen(url))
+
+    try:
+        return json.load(urllib2.urlopen(url))
+    except urllib2.HTTPError, e:
+        # TODO: log 404s, etc
+        print None
 
 class Player():
     # TODO: make this less magic...
