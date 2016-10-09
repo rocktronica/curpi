@@ -18,10 +18,18 @@ def get_action_script_result(script, argument_string=None):
          return e.output
 
 def get_metadata():
-    url = 'http://www.thecurrent.org/playlist/metadata/current'
+    url = 'http://nowplaying.publicradio.org/the-current/playlist'
 
     try:
-        return json.load(urllib2.urlopen(url))
+        response = json.load(urllib2.urlopen(url))
+        song_data = response['data']['songs'][0]
+
+        return dict(
+            artist = song_data.get('artist'),
+            title = song_data.get('title'),
+            album = song_data.get('album'),
+            art = song_data.get('art'),
+        )
     except urllib2.HTTPError, e:
         # TODO: log 404s, etc
         print None
