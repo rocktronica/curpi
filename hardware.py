@@ -25,6 +25,10 @@ PINS = dict(
     HIFIBERRY_38 = 38, # GPIO20
     HIFIBERRY_40 = 40, # GPIO21
 
+    # Short to ground to engage
+    BOOT_TIME_READ_WRITE = 36, # GPIO16
+    HALT_SHUTDOWN = 32, # GPIO12
+
     # Unused GPIO pins
     UNUSED_16 = 16, # GPIO23
     UNUSED_18 = 18, # GPIO24
@@ -33,9 +37,7 @@ PINS = dict(
     UNUSED_22 = 22, # GPIO25
     UNUSED_23 = 23, # GPIO11
     UNUSED_29 = 29, # GPIO05
-    UNUSED_32 = 32, # GPIO12
     UNUSED_33 = 33, # GPIO13
-    UNUSED_36 = 36, # GPIO16
     UNUSED_37 = 37, # GPIO26
 )
 

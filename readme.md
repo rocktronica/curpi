@@ -11,6 +11,8 @@ Then add `run.sh` to `/etc/rc.local`, substituting for your user name
 
     sudo -H -u USERNAME bash -c 'sh /home/USERNAME/curpi/run.sh &'
 
+Protect against SD card corruption when manually unplugging by making the [Pi read-only](https://learn.adafruit.com/read-only-raspberry-pi/).
+
 ## License
 
 MIT licensed or as components allow.
