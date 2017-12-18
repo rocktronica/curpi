@@ -13,7 +13,12 @@ Options:
 fi
 
 if [ -z $1 ]; then
-    rsync --exclude=".*/" --delete-excluded -avz ~/curpi/ tommy@curpi.local:~/curpi/
+    rsync \
+        --exclude=".*/" \
+        --exclude="_local/" \
+        --exclude="deploy_to_pi.sh" \
+        --delete-excluded -avz \
+        ~/curpi/ tommy@curpi.local:~/curpi/
 else
     rsync -avz $1 tommy@curpi.local:~/curpi/
 fi
