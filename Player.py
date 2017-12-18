@@ -1,9 +1,11 @@
 import json
+import os
 import subprocess
 import urllib2
 
 def get_action_script_result(script, argument_string=None):
-    command = 'sh action/' + script + '.sh'
+    cwd = os.path.dirname(__file__)
+    command = 'sh ' + cwd + '/action/' + script + '.sh'
 
     if argument_string:
         command += ' ' + str(argument_string)
