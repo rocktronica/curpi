@@ -6,11 +6,37 @@ import Player
 
 player = Player.Player()
 
+# Raspberry Pi 2 Model B
 PINS = dict(
-    ON_OFF_BUTTON = 7,
-    ON_OFF_LIGHT = 11,
-    VOLUME_UP_BUTTON = 13,
-    VOLUME_DOWN_BUTTON = 15,
+    ON_OFF_BUTTON = 7, # GPIO4
+    ON_OFF_LIGHT = 11, # GPIO17
+    VOLUME_UP_BUTTON = 13, # GPIO27
+    VOLUME_DOWN_BUTTON = 15, #GPIO22
+
+    # BELOW FOR DOCUMENTATION ONLY AND NOT EXPOSED
+
+    # Used by HiFiBerry DAC+ HW1.0
+    # https://support.hifiberry.com/hc/en-us/community/posts/201491612-GPIO-pins-used-by-Digi-
+    HIFIBERRY_3 = 3, # GPIO2
+    HIFIBERRY_5 = 5, # GPIO3
+    HIFIBERRY_31 = 31, # GPIO6
+    HIFIBERRY_12 = 12, # GPIO18
+    HIFIBERRY_35 = 35, # GPIO19
+    HIFIBERRY_38 = 38, # GPIO20
+    HIFIBERRY_40 = 40, # GPIO21
+
+    # Unused GPIO pins
+    UNUSED_16 = 16, # GPIO23
+    UNUSED_18 = 18, # GPIO24
+    UNUSED_19 = 19, # GPIO10
+    UNUSED_21 = 21, # GPIO09
+    UNUSED_22 = 22, # GPIO25
+    UNUSED_23 = 23, # GPIO11
+    UNUSED_29 = 29, # GPIO05
+    UNUSED_32 = 32, # GPIO12
+    UNUSED_33 = 33, # GPIO13
+    UNUSED_36 = 36, # GPIO16
+    UNUSED_37 = 37, # GPIO26
 )
 
 IO_PINS = [
