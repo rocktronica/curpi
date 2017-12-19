@@ -117,6 +117,9 @@ if __name__ == '__main__':
 
     set_interval(fetch_active_status, 2)
 
+    # Automatically play on start
+    player.play()
+
     while True:
         main()
         time.sleep(0.05)
